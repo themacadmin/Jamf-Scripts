@@ -117,7 +117,7 @@ timeStamp=$(date +"%F %T")
 	
 	# Get Model Name
 	modelIdentifier=$(sysctl hw.model | awk '{print $2}')
-	marketingModel="$(defaults read /System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist "$modelIdentifier"|sed -n -e 's/\\//g' -e 's/.*marketingModel = "\(.*\)";/\1/p')"
+	marketingModel="$(defaults read /System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist "$modelIdentifier"|sed -n -e 's/\\//g' -e 's/.*marketingModel = "\(.*\)";/\1/p'|sed 's/"/\\"/g')"
 	modelDisplay="Model: $marketingModel"
 	
 	# Get uptime
@@ -190,7 +190,7 @@ timeStamp=$(date +"%F %T")
 	if [ $? -ne 0 ]; then
 	    managedBy="Managed by: There is a problem with this computer's management framework."
 	else
-	    managedBy="Managed by: $jss."
+	    managedBy="Managed by: $jss"
 	fi
 	
 	# Get JSS availability
@@ -229,9 +229,9 @@ timeStamp=$(date +"%F %T")
 # Format Output
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-displayInfo="----------------------------------------------
-GENERAL
-
+displayInfo="
+General
+----------------------------------------------
 $computerName
 $hostName
 $osDisplay
@@ -239,40 +239,35 @@ $serialNumber
 $modelDisplay
 $upTime
 
+Hardware
 ----------------------------------------------
-HARDWARE
-
 $totalRam
 $diskSpace
 $batteryCycleCount
 
+Network
 ----------------------------------------------
-NETWORK
-
 $activeServices
 $SSID
 $SSH
 
+Management
 ----------------------------------------------
-MANAGEMENT
-
 $managedBy
 $jssReachable
 
+Active Directory
 ----------------------------------------------
-ACTIVE DIRECTORY
-
 $AD
 $testAD
-
-----------------------------------------------"
+"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Display Output
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # echo to stdout for testing
-echo "$displayInfo"
+# echo "$displayInfo"
 
 osascript -e "Tell application \"System Events\" to display dialog \"$displayInfo\" with title \"Computer Information\" with icon file posix file \"/System/Library/CoreServices/Finder.app/Contents/Resources/Finder.icns\" buttons {\"OK\"} default button {\"OK\"}"
 
@@ -281,7 +276,7 @@ osascript -e "Tell application \"System Events\" to display dialog \"$displayInf
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 if [ $jssAvailable -eq 0 ]; then
-	: # jamf recon
+	jamf recon
 else
 	printf "$timeStamp %s\n" "JSS is unavailable, unable to update inventory."
 fi
