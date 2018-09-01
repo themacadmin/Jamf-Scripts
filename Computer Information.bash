@@ -182,27 +182,6 @@ timeStamp=$(date +"%F %T")
 	SSH="SSH: $runCommand"
 	
 	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-	# Management
-	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-	
-	# Get JSS
-	jss=$(defaults read /Library/Preferences/com.jamfsoftware.jamf.plist jss_url)
-	if [ $? -ne 0 ]; then
-	    managedBy="Managed by: There is a problem with this computer's management framework."
-	else
-	    managedBy="Managed by: $jss"
-	fi
-	
-	# Get JSS availability
-	jamf checkjssconnection -retry 1
-	jssAvailable="$?"
-	if [ $jssAvailable -eq 0 ]; then
-	    jssReachable="     Management server is reachable."
-	else
-	    jssReachable="     Management cannot be reached."
-	fi
-	
-	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 	# Active Directory
 	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 	
@@ -231,7 +210,7 @@ timeStamp=$(date +"%F %T")
 
 displayInfo="
 General
-----------------------------------------------
+-------------------------------------------------
 $computerName
 $hostName
 $osDisplay
@@ -240,24 +219,19 @@ $modelDisplay
 $upTime
 
 Hardware
-----------------------------------------------
+-------------------------------------------------
 $totalRam
 $diskSpace
 $batteryCycleCount
 
 Network
-----------------------------------------------
+-------------------------------------------------
 $activeServices
 $SSID
 $SSH
 
-Management
-----------------------------------------------
-$managedBy
-$jssReachable
-
 Active Directory
-----------------------------------------------
+-------------------------------------------------
 $AD
 $testAD
 "
@@ -274,6 +248,10 @@ osascript -e "Tell application \"System Events\" to display dialog \"$displayInf
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Update Jamf Inventory
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Get JSS availability
+jamf checkjssconnection -retry 1
+jssAvailable="$?"
 
 if [ $jssAvailable -eq 0 ]; then
 	jamf recon
