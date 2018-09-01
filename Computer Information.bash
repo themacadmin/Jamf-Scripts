@@ -76,14 +76,6 @@ simplifyBytes() {
 
 timeStamp=$(date +"%F %T")
 
-thisMacIcon="/System/Library/CoreServices/Finder.app/Contents/Applications/Computer.app/Contents/Resources/OpenComputerAppIcon.icns"
-if [ -e "$thisMacIcon" ]; then
-    :
-else 
-    thisMacIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/com.apple.macbookpro-13-retina-touchid-silver.icns"
-fi 
-
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Data Collection for Output
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -127,6 +119,11 @@ fi
 	modelIdentifier=$(sysctl hw.model | awk '{print $2}')
 	marketingModel="$(defaults read /System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist "$modelIdentifier"|sed -n -e 's/\\//g' -e 's/.*marketingModel = "\(.*\)";/\1/p'|sed 's/"/\\"/g')"
 	modelDisplay="Model: $marketingModel"
+	if [[ "$marketingModel" = *Book* ]]; then
+		thisMacIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/com.apple.macbookpro-13-retina-touchid-silver.icns"
+	else
+		thisMacIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/com.apple.imac-unibody-27.icns"
+	fi 
 	
 	# Get uptime
 	runCommand=$( /usr/bin/uptime | /usr/bin/awk -F "(up |, [0-9] users)" '{ print $2 }' )
