@@ -274,7 +274,7 @@ $testAD
 # echo to stdout for testing
 echo "$displayInfo"
 
-osascript -e "Tell application \"System Events\" to display dialog \"$displayInfo\" with title \"Computer Information\" with icon file posix file \"/System/Library/CoreServices/Finder.app/Contents/Resources/Finder.icns\" buttons {\"OK\"} default button {\"OK\"})"
+osascript -e "Tell application \"System Events\" to display dialog \"$displayInfo\" with title \"Computer Information\" with icon file posix file \"/System/Library/CoreServices/Finder.app/Contents/Resources/Finder.icns\" buttons {\"OK\"} default button {\"OK\"}"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Update Jamf Inventory
