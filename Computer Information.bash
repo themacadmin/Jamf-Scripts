@@ -76,6 +76,14 @@ simplifyBytes() {
 
 timeStamp=$(date +"%F %T")
 
+thisMacIcon="/System/Library/CoreServices/Finder.app/Contents/Applications/Computer.app/Contents/Resources/OpenComputerAppIcon.icns"
+if [ -e "$thisMacIcon" ]; then
+    :
+else 
+    thisMacIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/com.apple.macbookpro-13-retina-touchid-silver.icns"
+fi 
+
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Data Collection for Output
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -243,7 +251,7 @@ $testAD
 # echo to stdout for testing
 # echo "$displayInfo"
 
-osascript -e "Tell application \"System Events\" to display dialog \"$displayInfo\" with title \"Computer Information\" with icon file posix file \"/System/Library/CoreServices/Finder.app/Contents/Resources/Finder.icns\" buttons {\"OK\"} default button {\"OK\"}"
+osascript -e "Tell application \"System Events\" to display dialog \"$displayInfo\" with title \"Computer Information\" with icon file posix file \"$thisMacIcon\" buttons {\"OK\"} default button {\"OK\"}"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Update Jamf Inventory
