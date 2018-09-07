@@ -117,7 +117,7 @@ timeStamp=$(date +"%F %T")
 	
 	# Get Model Name
 	modelIdentifier=$(sysctl hw.model | awk '{print $2}')
-	marketingModel="$(defaults read /System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist "$modelIdentifier"|sed -n -e 's/\\//g' -e 's/.*marketingModel = "\(.*\)";/\1/p'|sed 's/"/\\"/g')"
+	marketingModel="$(defaults read /System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist "$modelIdentifier" | awk -F'= ' '/marketingModel/{print $NF}' | sed 's/;$//;s/^"//;s/"$//;s/\\//g')"
 	modelDisplay="Model: $marketingModel"
 	if [[ "$marketingModel" = *Book* ]]; then
 		thisMacIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/com.apple.macbookpro-13-retina-touchid-silver.icns"
